@@ -1,7 +1,7 @@
-export default function Part(props) {
+export default function Part({name, exercises}) {
     return (
         <p>
-            {props.part} {props.exercises}
+            {name} {exercises}
         </p>
     );
 }

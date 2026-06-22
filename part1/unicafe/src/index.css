@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+    --font-mono: "Jetbrains Mono", monospace;
+
+    --color-ink: #111111;
+    --color-paper: #fffdf5;
+    --color-good: #38e27d;
+    --color-neutral: #ffe45e;
+    --color-bad: #ff5c5c;
+
+    --shadow-button: 4px 4px 0 var(--color-ink);
+    --shadow-button-hover: 6px 6px 0 var(--color-ink);
+    --shadow-button-active: 2px 2px 0 var(--color-ink);
+}

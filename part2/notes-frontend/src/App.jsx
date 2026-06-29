@@ -1,18 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Note from "./components/Note";
 
-const App = ({ initialNotes, filters }) => {
-    const [notes, setNotes] = useState(initialNotes);
+const App = () => {
+    useEffect(() => {
+        console.log("effect");
+        Promise.all([
+            axios.get("http://localhost:3001/notes"),
+            axios.get("http://localhost:3001/filters"),
+        ])
+            .then(([notesResponse, filtersResponse]) => {
+                setNotes(notesResponse.data);
+                setFilters(filtersResponse.data);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }, []);
+
+    const [notes, setNotes] = useState([]);
+    const [filters, setFilters] = useState([]);
+
     const [newNote, setNewNote] = useState("");
-    const [filter, setFilter] = useState("all");
+    const [currFilter, setCurrFilter] = useState("all");
 
     const filteredNotes = notes.filter((note) => {
-        if (filter == "all") {
-            return true;
-        } else if (filter == "important") {
-            return note.important;
-        } else if (filter == "not important") {
-            return !note.important;
+        switch (currFilter) {
+            case "important":
+                return note.important;
+            case "not important":
+                return !note.important;
+            default:
+                return true;
         }
     });
 
@@ -36,7 +55,7 @@ const App = ({ initialNotes, filters }) => {
 
     function handleFilterChange(event) {
         console.log("[INFO] filter changed: " + event.target.value);
-        setFilter(event.target.value);
+        setCurrFilter(event.target.value);
     }
 
     return (
@@ -44,9 +63,11 @@ const App = ({ initialNotes, filters }) => {
             <h1>Notes</h1>
             <div className="filter-bar">
                 <p>filter</p>
-                <select defaultValue={filter} onChange={handleFilterChange}>
-                    {filters.map((f, id) => (
-                        <option key={id} value={f}>{f}</option>
+                <select value={currFilter} onChange={handleFilterChange}>
+                    {filters.map((filter, id) => (
+                        <option key={id} value={filter.value}>
+                            {filter.value}
+                        </option>
                     ))}
                 </select>
             </div>

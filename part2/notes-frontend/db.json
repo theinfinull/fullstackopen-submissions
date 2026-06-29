@@ -1,0 +1,38 @@
+{
+    "notes": [
+        {
+            "id": "1",
+            "content": "content one",
+            "important": true
+        },
+        {
+            "id": "2",
+            "content": "content two",
+            "important": false
+        },
+        {
+            "id": "3",
+            "content": "content three",
+            "important": true
+        },
+        {
+            "id": "4",
+            "content": "content four",
+            "important": false
+        }
+    ],
+    "filters": [
+        {
+            "id": "1",
+            "value": "all"
+        },
+        {
+            "id": "2",
+            "value": "important"
+        },
+        {
+            "id": "3",
+            "value": "not important"
+        }
+    ]
+}

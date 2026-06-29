@@ -1,19 +1,15 @@
 {
-    "persons": [
-        {
-            "name": "Arto Hellas",
-            "number": "040-123456",
-            "id": 1
-        },
-        {
-            "name": "Ada Lovelace",
-            "number": "050-654321",
-            "id": 2
-        },
-        {
-            "name": "Content Three",
-            "number": "060-789012",
-            "id": 3
-        }
-    ]
+  "persons": [
+    {
+      "name": "john doe",
+      "number": "+91 90990 189280",
+      "id": "vd1q3F0woCQ"
+    },
+    {
+      "name": "johnny",
+      "number": "doe",
+      "id": "SYXEHmyZqh8"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

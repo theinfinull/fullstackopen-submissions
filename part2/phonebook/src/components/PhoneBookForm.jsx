@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function PhoneBooksForm({ persons, setPersons }) {
+export default function PhoneBooksForm({ modifyHandler, notify }) {
     const [newName, setNewName] = useState("");
     const [newNumber, setNewNumber] = useState("");
 
@@ -9,32 +9,20 @@ export default function PhoneBooksForm({ persons, setPersons }) {
 
         if (!newName) {
             console.log(`[INFO] name is empty`);
+            notify("error", "name is empty");
             return;
         }
 
         if (!newNumber) {
             console.log(`[INFO] number is empty`);
-            return;
-        }
-
-        if (persons.some((person) => person.name == newName)) {
-            alert(`name : ${newName} already exists in phonebook`);
-            console.log(`[INFO] name aleady exists in phonebook : ${newName}`);
-            return;
-        }
-
-        if (persons.some((person) => person.number == newNumber)) {
-            alert(`number : ${newNumber} already exists in phonebook`);
-            console.log(
-                `[INFO] number aleady exists in phonebook : ${newName}`,
-            );
+            notify("error", "number is empty");
             return;
         }
 
         console.log(
             `[INFO] form submitted with name : ${newName} and number : ${newNumber}`,
         );
-        setPersons(persons.concat({ name: newName, number: newNumber }));
+        modifyHandler(newName, newNumber);
     }
 
     return (

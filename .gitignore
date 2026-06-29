@@ -23,3 +23,7 @@ npm-debug.log*
 
 # Vite
 *.local
+
+# db files
+db.json
+*.db

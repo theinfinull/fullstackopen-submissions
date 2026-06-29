@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function PhoneBookView({ persons }) {
+export default function PhoneBookView({ persons, deleteHandler }) {
     const [search, setSearch] = useState("");
 
     const shownPersons = search
@@ -23,8 +23,14 @@ export default function PhoneBookView({ persons }) {
                 />
             </div>
             <ul>
-                {shownPersons.map((person, id) => (
-                    <li key={id}>{person.name + " : " + person.number}</li>
+                {shownPersons.map((person) => (
+                    <li key={person.id}>
+                        {person.name + " : " + person.number}
+                        <button
+                            onClick={() => deleteHandler(person.id)}
+                            className="btn-delete"
+                        >delete</button>
+                    </li>
                 ))}
             </ul>
         </div>

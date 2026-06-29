@@ -1,0 +1,22 @@
+{
+    "name": "notes-backend",
+    "version": "1.0.0",
+    "description": "backend for notes app",
+    "main": "src/server.js",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "node --watch src/server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "module",
+    "dependencies": {
+        "better-sqlite3": "^12.11.1",
+        "cors": "^2.8.6",
+        "express": "^5.2.1"
+    },
+    "allowScripts": {
+        "better-sqlite3@12.11.1": true
+    }
+}

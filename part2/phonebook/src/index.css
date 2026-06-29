@@ -105,7 +105,48 @@ button[type="submit"]:active {
     box-shadow: 1px 1px 0 #1C1917;
 }
 
-/* Names list */
+/* Notification */
+@keyframes slideIn {
+    from { transform: translateX(120%); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; transform: translateX(120%); }
+}
+
+.notification {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    min-width: 220px;
+    max-width: 340px;
+    padding: 0.75rem 1rem;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 3px solid #1C1917;
+    box-shadow: 4px 4px 0 #1C1917;
+    z-index: 1000;
+    animation: slideIn 0.3s ease forwards, fadeOut 0.4s ease 2.6s forwards;
+}
+
+.notification.success {
+    background: #d1fae5;
+    color: #065f46;
+    border-color: #065f46;
+    box-shadow: 4px 4px 0 #065f46;
+}
+
+.notification.error {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-color: #b91c1c;
+    box-shadow: 4px 4px 0 #b91c1c;
+}
 ul {
     list-style: none;
     border: 3px solid #1C1917;
@@ -134,4 +175,34 @@ ul li:last-child {
 
 ul li:hover {
     background: #FDE8DE;
+}
+
+ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn-delete {
+    padding: 0.3rem 0.75rem;
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: #FFFCF8;
+    color: #b91c1c;
+    border: 2px solid #b91c1c;
+    box-shadow: 2px 2px 0 #b91c1c;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background: #b91c1c;
+    color: #FFFCF8;
+}
+
+.btn-delete:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 #b91c1c;
 }

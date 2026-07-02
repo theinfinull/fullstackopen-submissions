@@ -1,4 +1,4 @@
-const BASE_URL = "/api/persons";
+const BASE_URL = "/api/phonebook";
 
 async function request(url, options = {}) {
     const response = await fetch(url, {

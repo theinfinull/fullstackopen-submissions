@@ -46,7 +46,7 @@ form {
     align-items: center;
     border: 3px solid #1C1917;
     margin-bottom: 0.75rem;
-    box-shadow: 4px 4px 0 #DA7756;
+    box-shadow: 4px 4px 0 #29B6F6;
 }
 
 .field label {
@@ -88,7 +88,7 @@ button[type="submit"] {
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    background: #DA7756;
+    background: #29B6F6;
     color: #1C1917;
     border: 3px solid #1C1917;
     box-shadow: 3px 3px 0 #1C1917;
@@ -96,7 +96,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background: #c9623f;
+    background: #2196F3;
     color: #FFFCF8;
 }
 
@@ -150,7 +150,7 @@ button[type="submit"]:active {
 ul {
     list-style: none;
     border: 3px solid #1C1917;
-    box-shadow: 5px 5px 0 #DA7756;
+    box-shadow: 5px 5px 0 #29B6F6;
 }
 
 ul:empty::after {

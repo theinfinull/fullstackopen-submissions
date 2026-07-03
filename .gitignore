@@ -27,3 +27,10 @@ npm-debug.log*
 # db files
 db.json
 *.db
+
+# catalyst zip files
+*catalyst.zip
+
+# ignore phonebook-backend dist
+!part3/phonebook-backend/dist/
+!lab/mongodb/dist/

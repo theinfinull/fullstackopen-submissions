@@ -70,6 +70,11 @@ export default function App() {
         <div className="app">
             <header className="header">
                 <h1 className="wordmark">notes.</h1>
+                {notes.length > 0 && (
+                    <span className="note-count">
+                        {notes.length} {notes.length === 1 ? "note" : "notes"}
+                    </span>
+                )}
             </header>
 
             <CreateForm onCreate={handleCreate} />
@@ -103,7 +108,14 @@ export default function App() {
             </div>
 
             {visible.length === 0 ? (
-                <p className="empty">no notes{search ? ` for "${search}"` : ""}.</p>
+                <div className="empty">
+                    <p className="empty-title">no notes{search ? ` for "${search}"` : ""}</p>
+                    <p className="empty-hint">
+                        {notes.length === 0
+                            ? "create your first note above to get started."
+                            : "try a different search or filter."}
+                    </p>
+                </div>
             ) : (
                 <div className="notes-grid">
                     {visible.map((note) => (

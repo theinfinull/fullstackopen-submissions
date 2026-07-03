@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3389/api/notes";
+const BASE_URL = "/api/notes";
 
 async function request(url, options = {}) {
     const response = await fetch(url, {

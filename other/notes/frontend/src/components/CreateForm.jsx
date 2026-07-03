@@ -31,16 +31,18 @@ export default function CreateForm({ onCreate }) {
                 onChange={(e) => setContent(e.target.value)}
             />
             <div className="create-footer">
-                <label className="check-label">
-                    <input
-                        type="checkbox"
-                        checked={isImportant}
-                        onChange={(e) => setIsImportant(e.target.checked)}
-                    />
-                    <Star size={13} fill={isImportant ? "currentColor" : "none"} className={isImportant ? "star-checked" : "star-unchecked"} />
+                <button
+                    type="button"
+                    className={`important-toggle ${isImportant ? "active" : ""}`}
+                    onClick={() => setIsImportant((prev) => !prev)}
+                    aria-pressed={isImportant}
+                >
+                    <Star size={13} fill={isImportant ? "currentColor" : "none"} />
                     important
-                </label>
-                <button type="submit" className="btn-create">+ create note</button>
+                </button>
+                <button type="submit" className="btn-create" disabled={!title.trim() || !content.trim()}>
+                    + create note
+                </button>
             </div>
         </form>
     );

@@ -35,15 +35,20 @@ export default function App() {
             })
             .catch((err) => {
                 console.log("[ERR]: failed to fetch persons:" + err);
-                notify("success", "failed to fetch persons");
+                notify("error", "failed to fetch persons");
             });
     }
 
     function deleteHandler(id) {
-        removePerson(id).then(() => {
-            renderAllPersons();
-            notify("success", "person deleted successfully");
-        });
+        removePerson(id)
+            .then(() => {
+                renderAllPersons();
+                notify("success", "person deleted successfully");
+            })
+            .catch((err) => {
+                console.log("[ERR]: failed to delete person:" + err);
+                notify("error", "failed to delete : " + err.message);
+            });
     }
 
     // supports CREATE and EDIT
@@ -57,10 +62,15 @@ export default function App() {
         } else {
             action = createPerson(name, number);
         }
-        action.then(() => {
-            notify("success", `${name} added/updated`);
-            renderAllPersons();
-        });
+        action
+            .then(() => {
+                notify("success", `${name} added/updated`);
+                renderAllPersons();
+            })
+            .catch((err) => {
+                console.log("[ERR]: failed to modify person:" + err);
+                notify("error", "failed to modify : " + err.message);
+            });
     }
 
     return (

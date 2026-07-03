@@ -9,15 +9,16 @@ async function request(url, options = {}) {
         ...options,
     });
 
+    let data = {};
+    try {
+        data = await response.json();
+    } catch {}
+
     if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+        throw new Error(data.message || "something went wrong");
     }
 
-    if (response.status === 204) {
-        return null;
-    }
-
-    return response.json();
+    return data;
 }
 
 async function createPerson(name, number) {

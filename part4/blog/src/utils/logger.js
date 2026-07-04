@@ -9,17 +9,17 @@ const LOG_FILE = path.join(LOG_DIR, "app.log");
 
 fs.mkdirSync(LOG_DIR, { recursive: true });
 
-const logStream = fs.createWriteStream(LOG_FILE, {
-    flags: "a", // append
-});
-
 function timestamp() {
     return new Date().toISOString();
 }
 
 function format(value) {
     if (value instanceof Error) {
-        return value.stack ?? value.message;
+        let output = value.stack ?? value.message;
+        if (value.cause) {
+            output += `\ncaused by: ${format(value.cause)}`;
+        }
+        return output;
     }
 
     if (typeof value === "string") {
@@ -37,7 +37,7 @@ function log(level, loggerName, ...args) {
     const prefix = `[${timestamp()}] ${level.padEnd(5)} [${loggerName}]`;
     const message = args.map(format).join(" ");
 
-    logStream.write(`${prefix} ${message}\n`);
+    fs.appendFileSync(LOG_FILE, `${prefix} ${message}\n`);
 }
 
 export function createLogger(loggerName) {

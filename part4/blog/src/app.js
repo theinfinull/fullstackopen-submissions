@@ -3,8 +3,9 @@ import cors from "cors";
 
 import { createLogger } from "./utils/logger.js";
 import morgan from "./utils/morgan.js";
-import { unknownEndpointHandler } from "./utils/unknownEnpointHandler.js";
+import { unknownEndpointHandler } from "./utils/unknownEndpointHandler.js";
 import { errorHandler } from "./utils/errorHandler.js";
+import blogRouter from "./controllers/blog.js";
 
 const logger = createLogger("app");
 
@@ -17,6 +18,9 @@ export function createApp() {
     app.use(express.json());
 
     logger.info("configuring routes...");
+    app.use("/api/blogs", blogRouter)
+
+    logger.info("configuring error handlers...");
     app.use(unknownEndpointHandler);
     app.use(errorHandler);
 

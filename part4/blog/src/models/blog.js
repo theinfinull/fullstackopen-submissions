@@ -14,7 +14,7 @@ const blogSchema = mongoose.Schema(
         },
         url: {
             type: String,
-            required: [true, "title is required"],
+            required: [true, "url is required"],
             trim: true,
             match: [/^https?:\/\/(?:[\w-]+\.)+[\w-]+(?:\/[^\s]*)?$/i, "invalid URL"],
         },

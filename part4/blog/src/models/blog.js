@@ -18,7 +18,10 @@ const blogSchema = mongoose.Schema(
             trim: true,
             match: [/^https?:\/\/(?:[\w-]+\.)+[\w-]+(?:\/[^\s]*)?$/i, "invalid URL"],
         },
-        likes: Number,
+        likes: {
+            type: Number,
+            default: 0,
+        },
     },
     {
         timestamps: true,

@@ -1,6 +1,7 @@
 import "dotenv/config";
 import assert from "node:assert";
 import { after, beforeEach, describe, test } from "node:test";
+import mongoose from "mongoose";
 import supertest from "supertest";
 
 import { createApp } from "../app.js";
@@ -18,6 +19,10 @@ const BLOG_TEMPLATE = {
     url: "https://example.com",
     likes: 1,
 };
+
+// a syntactically valid ObjectId that (almost certainly) doesn't exist
+const NONEXISTENT_ID = new mongoose.Types.ObjectId().toString();
+const MALFORMED_ID = "not-an-object-id";
 
 // Helpers ---
 function blogFields(blog) {
@@ -43,6 +48,18 @@ function getBlogsRequest() {
         .expect("Content-Type", /application\/json/);
 }
 
+function getBlogRequest(id) {
+    return api.get(`/api/blogs/${id}`).expect("Content-Type", /application\/json/);
+}
+
+function putBlogRequest(id, updates) {
+    return api.put(`/api/blogs/${id}`).send(updates).expect("Content-Type", /application\/json/);
+}
+
+function deleteBlogRequest(id) {
+    return api.delete(`/api/blogs/${id}`).expect("Content-Type", /application\/json/);
+}
+
 async function getBlogs() {
     const { body } = await getBlogsRequest();
     return body;
@@ -63,15 +80,23 @@ async function createBlog(title) {
 }
 
 async function seedBlogs(...titles) {
+    const blogs = [];
     for (const title of titles) {
-        await createBlog(title);
+        blogs.push(await createBlog(title));
     }
+    return blogs;
 }
 
 async function expectValidationError(blog, message) {
     const { body } = await postBlog(blog).expect(400);
 
     assert.strictEqual(body.message, message);
+}
+
+async function expectNotFound(request) {
+    const { body } = await request.expect(404);
+
+    assert.strictEqual(body.message, "blog not found");
 }
 
 // Lifecycle ---
@@ -125,5 +150,77 @@ describe("GET /api/blogs", () => {
         const blogs = await getBlogs();
 
         assert.strictEqual(blogs.length, 2);
+    });
+});
+
+// GET by id tests ---
+describe("GET /api/blogs/:id", () => {
+    test("returns the matching blog", async () => {
+        const created = await createBlog("a");
+
+        const { body } = await getBlogRequest(created.id).expect(200);
+
+        assert.deepStrictEqual(body, created);
+    });
+
+    test("returns 404 for a nonexistent id", async () => {
+        await expectNotFound(getBlogRequest(NONEXISTENT_ID));
+    });
+
+    test("returns 404 for a malformed id", async () => {
+        await expectNotFound(getBlogRequest(MALFORMED_ID));
+    });
+});
+
+// PUT tests ---
+describe("PUT /api/blogs/:id", () => {
+    test("updates the matching blog", async () => {
+        const created = await createBlog("a");
+
+        const { body } = await putBlogRequest(created.id, { likes: 10 }).expect(200);
+
+        assert.strictEqual(body.message, "blog updated successfully");
+        assert.strictEqual(body.blog.id, created.id);
+        assert.strictEqual(body.blog.likes, 10);
+
+        const { body: fetched } = await getBlogRequest(created.id).expect(200);
+        assert.strictEqual(fetched.likes, 10);
+    });
+
+    test("returns 404 for a nonexistent id", async () => {
+        await expectNotFound(putBlogRequest(NONEXISTENT_ID, { likes: 10 }));
+    });
+
+    test("returns 404 for a malformed id", async () => {
+        await expectNotFound(putBlogRequest(MALFORMED_ID, { likes: 10 }));
+    });
+
+    test("rejects an update that violates validation", async () => {
+        const created = await createBlog("a");
+
+        const { body } = await putBlogRequest(created.id, { title: "" }).expect(400);
+
+        assert.strictEqual(body.message, "Validation failed: title: title is required");
+    });
+});
+
+// DELETE tests ---
+describe("DELETE /api/blogs/:id", () => {
+    test("deletes the matching blog", async () => {
+        const created = await createBlog("a");
+
+        const { body } = await deleteBlogRequest(created.id).expect(200);
+
+        assert.strictEqual(body.message, "blog deleted successfully");
+
+        await expectNotFound(getBlogRequest(created.id));
+    });
+
+    test("returns 404 for a nonexistent id", async () => {
+        await expectNotFound(deleteBlogRequest(NONEXISTENT_ID));
+    });
+
+    test("returns 404 for a malformed id", async () => {
+        await expectNotFound(deleteBlogRequest(MALFORMED_ID));
     });
 });

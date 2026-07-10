@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { loadConfig } from "./utils/config.js";
+import { config, loadConfig } from "./utils/config.js";
 import { createLogger } from "./utils/logger.js";
 import { createApp } from "./app.js";
 import { connectToMongoDB } from "./utils/mongoDB.js";
@@ -28,7 +28,7 @@ const port = process.env.NODE_PORT || 3300;
 console.log(`initiating server startup on port: ${port}`);
 
 try {
-    const config = loadConfig();
+    loadConfig();
     const app = createApp();
 
     logger.info("connecting to mongodb...");

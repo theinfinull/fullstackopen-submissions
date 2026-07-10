@@ -8,7 +8,7 @@ const router = Router();
 router.get(
     "/",
     asyncHandler(async (req, res) => {
-        const blogs = await Blog.find({});
+        const blogs = await Blog.find({ user: req.user.id });
         res.json(blogs);
     }),
 );
@@ -16,7 +16,7 @@ router.get(
 router.get(
     "/:id",
     asyncHandler(async (req, res) => {
-        const blog = await orNotFound(Blog.findById(req.params.id), "blog");
+        const blog = await orNotFound(Blog.findOne({ _id: req.params.id, user: req.user.id }), "blog");
         res.json(blog);
     }),
 );
@@ -24,11 +24,13 @@ router.get(
 router.post(
     "/",
     asyncHandler(async (req, res) => {
-        const blog = new Blog(req.body);
-        const result = await blog.save();
+        const blog = await Blog.create({
+            ...req.body,
+            user: req.user.id,
+        });
 
         res.status(201).json({
-            blog: result,
+            blog,
             message: "blog created successfully",
         });
     }),
@@ -38,7 +40,7 @@ router.put(
     "/:id",
     asyncHandler(async (req, res) => {
         const blog = await orNotFound(
-            Blog.findByIdAndUpdate(req.params.id, req.body, {
+            Blog.findOneAndUpdate({ _id: req.params.id, user: req.user.id }, req.body, {
                 returnDocument: "after",
                 runValidators: true,
                 context: "query",
@@ -56,7 +58,7 @@ router.put(
 router.delete(
     "/:id",
     asyncHandler(async (req, res) => {
-        await orNotFound(Blog.findByIdAndDelete(req.params.id), "blog");
+        await orNotFound(Blog.findOneAndDelete({ _id: req.params.id, user: req.user.id }), "blog");
 
         res.json({ message: "blog deleted successfully" });
     }),

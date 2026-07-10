@@ -1,11 +1,12 @@
 import "dotenv/config";
 import assert from "node:assert";
-import { after, beforeEach, describe, test } from "node:test";
+import { after, before, beforeEach, describe, test } from "node:test";
 import mongoose from "mongoose";
 import supertest from "supertest";
 
 import { createApp } from "../app.js";
 import Blog from "../models/blog.js";
+import User from "../models/user.js";
 import { loadConfig } from "../utils/config.js";
 import { connectToMongoDB, disconnectFromMongoDB } from "../utils/mongoDB.js";
 
@@ -20,9 +21,18 @@ const BLOG_TEMPLATE = {
     likes: 1,
 };
 
+const TEST_USER = {
+    username: "blog.tests.user",
+    name: "Blog Tests User",
+    password: "TestPassword123!",
+};
+
 // a syntactically valid ObjectId that (almost certainly) doesn't exist
 const NONEXISTENT_ID = new mongoose.Types.ObjectId().toString();
 const MALFORMED_ID = "not-an-object-id";
+
+let authHeader;
+let userId;
 
 // Helpers ---
 function blogFields(blog) {
@@ -31,12 +41,21 @@ function blogFields(blog) {
 }
 
 async function clearBlogs() {
-    await Blog.deleteMany({});
+    await Blog.deleteMany({ user: userId });
+}
+
+async function authenticateTestUser() {
+    await api.post("/api/signup").send(TEST_USER);
+
+    const { body } = await api.post("/api/login").send({ username: TEST_USER.username, password: TEST_USER.password }).expect(200);
+
+    return { token: body.token, id: body.user.id };
 }
 
 function postBlog(blog) {
     return api
         .post("/api/blogs")
+        .set("Authorization", authHeader)
         .send(blog)
         .expect("Content-Type", /application\/json/);
 }
@@ -44,20 +63,31 @@ function postBlog(blog) {
 function getBlogsRequest() {
     return api
         .get("/api/blogs")
+        .set("Authorization", authHeader)
         .expect(200)
         .expect("Content-Type", /application\/json/);
 }
 
 function getBlogRequest(id) {
-    return api.get(`/api/blogs/${id}`).expect("Content-Type", /application\/json/);
+    return api
+        .get(`/api/blogs/${id}`)
+        .set("Authorization", authHeader)
+        .expect("Content-Type", /application\/json/);
 }
 
 function putBlogRequest(id, updates) {
-    return api.put(`/api/blogs/${id}`).send(updates).expect("Content-Type", /application\/json/);
+    return api
+        .put(`/api/blogs/${id}`)
+        .set("Authorization", authHeader)
+        .send(updates)
+        .expect("Content-Type", /application\/json/);
 }
 
 function deleteBlogRequest(id) {
-    return api.delete(`/api/blogs/${id}`).expect("Content-Type", /application\/json/);
+    return api
+        .delete(`/api/blogs/${id}`)
+        .set("Authorization", authHeader)
+        .expect("Content-Type", /application\/json/);
 }
 
 async function getBlogs() {
@@ -100,10 +130,17 @@ async function expectNotFound(request) {
 }
 
 // Lifecycle ---
+before(async () => {
+    const { token, id } = await authenticateTestUser();
+    authHeader = `Bearer ${token}`;
+    userId = id;
+});
+
 beforeEach(clearBlogs);
 
 after(async () => {
     await clearBlogs();
+    await User.deleteOne({ _id: userId });
     await disconnectFromMongoDB();
 });
 

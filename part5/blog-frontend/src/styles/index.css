@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap");
+@import "./theme.css";
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-mono);
+}
+
+main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: var(--space-6) var(--space-5);
+}

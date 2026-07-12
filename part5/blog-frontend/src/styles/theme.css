@@ -1,0 +1,11 @@
+:root {
+    --bg: #101010;
+    --bg-muted: #181818;
+    --fg: #ddd;
+    --fg-muted: #888;
+    --border: #333333;
+    --accent: #c2ff77;
+    --danger: #e05a5a;
+
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}

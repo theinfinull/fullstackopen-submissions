@@ -1,0 +1,126 @@
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 420px;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 32px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.auth-form h2 {
+    align-self: center;
+    margin: 0;
+    font-size: 18px;
+}
+
+.auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.auth-field label {
+    font-size: 13px;
+    color: var(--fg);
+}
+
+.auth-label-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.auth-toggle-visibility {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: inherit;
+    color: var(--fg-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 3px;
+    cursor: pointer;
+}
+
+.auth-toggle-visibility:hover {
+    background: var(--bg-muted);
+}
+
+.auth-field input {
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--fg);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+}
+
+.auth-field input:focus {
+    outline: none;
+    background: var(--bg-muted);
+    border-color: var(--accent);
+}
+
+.auth-error {
+    margin: 0;
+    font-size: 13px;
+    color: var(--danger);
+    border-radius: 4px;
+    padding: 4px 8px;
+    background: var(--danger);
+    background: color-mix(in srgb, var(--danger) 10%, transparent);
+}
+
+.auth-submit {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    border-radius: 6px;
+    padding: 8px 24px;
+    cursor: pointer;
+}
+
+.auth-submit:hover {
+    opacity: 0.9;
+}
+
+.auth-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.auth-switch {
+    margin: 0;
+    font-size: 13px;
+    color: var(--fg);
+    align-self: center;
+}
+
+.auth-switch button {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    background: none;
+    border: none;
+    text-decoration: underline;
+    padding: 0;
+    cursor: pointer;
+}
+
+.auth-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 64px);
+}

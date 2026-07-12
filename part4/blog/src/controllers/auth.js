@@ -26,6 +26,10 @@ authRouter.post(
             return res.status(409).json({ message: "username already taken, try a different one" });
         }
 
+        if (password.length <= 8) {
+            return res.status(400).json({ message: "password is too short. it must be atleast 8 characters long" });
+        }
+
         const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
         const user = await User.create({ username, name, passwordHash });
 
